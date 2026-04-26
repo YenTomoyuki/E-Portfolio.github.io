@@ -1,0 +1,292 @@
+/* --- GLOBAL & NAV --- */
+* {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    font-family: 'Georgia', serif;
+}
+
+body { background: #e6e6e6; overflow-x: hidden; }
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: #f5f5f5;
+    position: relative;
+    z-index:1000;
+}
+ .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            list-style: none;
+            /* Shrinks to fit when sub-nav pushes space */
+            flex-shrink: 1;
+        }
+
+        .nav-links > li {
+            position: static; /* items stay in flow — no absolute parent needed */
+            flex-shrink: 0;
+        }
+
+        /* All top-level pills */
+        .nav-links > li > a {
+            text-decoration: none;
+            color: white;
+            background-color: #2e5d26;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-size: 14px;
+            display: block;
+            white-space: nowrap;
+            transition: background-color 0.3s ease, transform 0.2s ease,
+                        padding 0.35s ease, font-size 0.35s ease;
+        }
+
+        .nav-links > li > a:hover  { background-color: #1e3d1a; }
+        .nav-links > li > a.active { background-color: #8b895a; }
+
+        /* When ANY dropdown is open/hovered, shrink the OTHER top-level pills */
+        .nav-links:has(li.has-dropdown:hover) > li:not(.has-dropdown:hover) > a,
+        .nav-links:has(li.open)               > li:not(.open) > a {
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        /* ── FUSED SUB-NAV STRIP ──
+           The whole strip sits INLINE in the flex row, not absolute-positioned.
+           It grows from 0 width to auto, fused directly onto the parent pill.
+        */
+        .has-dropdown {
+            display: flex;
+            align-items: center;
+            /* No gap — sub-nav touches parent pill */
+        }
+
+        .has-dropdown > a {
+            /* Keep left half-rounded, right will be flush against sub-nav */
+            border-radius: 25px;
+            position: relative;
+            z-index: 2;
+            transition: background-color 0.3s ease, border-radius 0.2s ease,
+                        padding 0.35s ease, font-size 0.35s ease;
+        }
+
+        /* When open or hovered, flatten the right side of the parent pill */
+        .has-dropdown:hover > a,
+        .has-dropdown.open  > a {
+            border-radius: 25px 0 0 25px;
+        }
+
+        /* The fused strip */
+        .dropdown-menu {
+            display: flex;
+            flex-direction: row;
+            list-style: none;
+            align-items: stretch;
+            overflow: hidden;
+
+            /* Fused look: lighter green background, rounded only on the right end */
+            background-color: #4a7c3f;
+            border-radius: 0 25px 25px 0;
+
+            /* Collapsed state */
+            max-width: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: max-width 0.4s cubic-bezier(0.4,0,0.2,1),
+                        opacity   0.3s ease;
+            white-space: nowrap;
+            z-index: 2000;
+        }
+
+        /* Expanded state */
+        .has-dropdown:hover .dropdown-menu,
+        .has-dropdown.open  .dropdown-menu {
+            max-width: 600px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Each sub-item — no individual background, the strip has it */
+        .dropdown-menu li {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Divider between sub-items */
+        .dropdown-menu li + li {
+            border-left: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .dropdown-menu li a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 18px;
+            font-size: 13px;
+            display: block;
+            white-space: nowrap;
+            transition: background-color 0.2s ease;
+            border-radius: 0;
+        }
+
+        /* Round only the very last sub-item's right edge */
+        .dropdown-menu li:last-child a {
+            border-radius: 0 25px 25px 0;
+        }
+
+        .dropdown-menu li a:hover  { background-color: rgba(255,255,255,0.15); }
+        .dropdown-menu li a.active { background-color: #8b895a; }
+
+        .navbar-bottom-border {
+            height: 5px;
+            background-color: #b1bf88;
+            width: 100%;
+            position: relative;
+            z-index: 999;
+        }
+
+.logo { color: #3a6030; font-size: 18px; }
+.logo span { color: #2b521d; font-weight: bold; font-size: 22px; }
+
+.border { height: 5px; background: #b1bf88; width: 100%; }
+
+/* --- MAIN CONTAINER & SIDEBAR --- */
+.container {
+    display: flex;
+    height: calc(100vh - 70px);
+    overflow: hidden;
+    position: relative;
+}
+
+.sidebar-wrapper {
+    position: relative;
+    width: 250px;
+    z-index: 10;
+    transition: width 0.5s ease;
+}
+
+.sidebar-wrapper:has(.sidebar:hover) { width: 550px; }
+
+.sidebar {
+    position: absolute; top: 0; left: 0; height: 100%;
+    padding: 40px 30px; transition: width 0.5s ease;
+    clip-path: path("M0,0 L250,0 C150,150 350,350 250,500 C100,650 350,850 250,1000 L0,1000 Z");
+}
+
+.sidebar.s1 { width: 400px; background: #2e5d26; z-index: 3; }
+.sidebar.s2 { width: 400px; background: #5d7b40; z-index: 2; margin-left: 40px; }
+.sidebar.s3 { width: 400px; background: #89a67e; z-index: 1; margin-left: 80px; }
+
+/* Keep Shape Consistent on Hover */
+.sidebar:hover { width: 550px; }
+
+.reveal-text {
+    opacity: 0; transform: translateX(-20px);
+    transition: 0.4s ease 0.1s; color: white; white-space: nowrap;
+}
+
+.sidebar.s1:hover .reveal-text { opacity: 1; transform: translateX(0); margin-left: 60px; }
+.bg {
+    background: linear-gradient(135deg, #cfd8c3 0%, #d4ddc8 100%);
+    min-height: calc(100vh - 70px);  /* ← min-height instead of fixed height */
+    overflow-y: auto;                /* ← allows page to scroll */
+}
+
+/* --- GALLERY GRID (CONTAINER2) --- */
+.container2 {
+    background: linear-gradient(135deg, #cfd8c3 0%, #d4ddc8 100%);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;    /* ← makes all cards match tallest */
+    overflow-y: auto;        /* ← allows scrolling if content overflows */
+    position: relative;
+    padding: 20px;
+}
+
+.responsive {
+    padding: 0 10px;
+    width: 25%;
+    display: flex;           /* ← flex child stretches the inner card */
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+div.gallery {
+    margin-top: 15px;
+    border: 5px solid #cbcab1;
+    background: #89a67e;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;           /* ← makes desc push to fill */
+    flex-direction: column;
+    flex: 1;                 /* ← stretches card to match tallest in row */
+}
+
+div.gallery h1 {
+    text-align: center; background: #cbcab1; color: #4a5d23;
+    font-size: 18px; padding: 10px; margin: 0;
+}
+
+div.gallery img {
+    width: 100%; height: 180px; object-fit: cover;
+    padding: 10px; border-bottom: 2px solid #5d7b40; cursor: pointer;
+}
+
+div.desc {
+    padding: 15px;
+    background: #cbcab1;
+    text-align: justify;
+    flex: 1;                 /* ← desc area grows to fill remaining height */
+}
+
+div.desc p {
+    font-size: 13px;
+    margin-top: 10px;
+    line-height: 1.4;
+}
+
+/* BUTTON */
+.buttonholder { text-align: center; margin-bottom: 5px; }
+.button {
+    background: #4a7c3f; color: white; padding: 6px 15px;
+    border-radius: 20px; text-decoration: none; font-size: 12px;
+    display: inline-block; transition: 0.3s;
+}
+.button:hover { background: #2b521d; transform: scale(1.05); }
+
+/* --- MODAL --- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 900px;
+  height: auto;        /* ← lets image grow to full size */
+}
+
+#caption { text-align: center; color: #ccc; padding: 15px; }
+
+.close {
+    position: absolute; top: 15px; right: 35px;
+    color: white; font-size: 40px; font-weight: bold; cursor: pointer;
+}
+
+@keyframes zoom { from {transform:scale(0)} to {transform:scale(1)} }
+
+/* RESPONSIVE BREAKPOINTS */
+@media screen and (max-width: 1000px) { .responsive { width: 50%; } }
+@media screen and (max-width: 600px) { .responsive { width: 100%; } }

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio | Quizzes</title>
+    <link rel="stylesheet" href="Portfolio.css">
+    <link href="https://fonts.googleapis.com/css2?family=Georgia&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="navbar">
+    <div class="logo">
+        <span class="logo-star">⭐</span>
+        <span><span class="logo-text">My Portfolio</span> | Object-Oriented Programming</span>
+    </div>
+    <ul class="nav-links">
+
+        <!-- Home -->
+        <li><a href="Portfolio2.html">Home</a></li>
+
+        <!-- Midterm — fused sub-nav strip expands to the right -->
+        <li id="midterm-item" class="has-dropdown">
+            <a href="#" id="midterm-btn">Midterm</a>
+            <ul class="dropdown-menu" id="midterm-dropdown">
+                <li><a href="Seatwork.html">Seatworks</a></li>
+                <li><a href="Activities.html">Activities</a></li>
+                <li><a class="active" href="Quizzes.html">Quizzes</a></li>
+                <li><a href="Exams.html">Exam</a></li>
+            </ul>
+        </li>
+
+        <!-- Final — fused sub-nav strip expands to the right -->
+        <li id="final-item" class="has-dropdown">
+            <a href="#" id="final-btn">Final</a>
+            <ul class="dropdown-menu" id="final-dropdown">
+                <li><a href="Portfolio2.html">Seatworks</a></li>
+                <li><a href="Portfolio2.html">Activities</a></li>
+                <li><a href="Portfolio2.html">Quizzes</a></li>
+                <li><a href="Portfolio2.html">Exam</a></li>
+            </ul>
+        </li>
+
+        <!-- Contact -->
+        <li><a href="Portfolio2.html#about">Contact</a></li>
+
+    </ul>
+</div>
+<div class="navbar-bottom-border"></div>
+<div class="bg">
+        <div class="container2">
+            <div class="responsive">
+                <div class="gallery">
+                    <h1>Midterm Quiz #1 (FTF)</h1>
+                    <img class="gallery-img" src="MQ1.png" alt="Midterm Quiz #1">
+                    
+                    <div class="desc">
+                        <h6>Reflection</h6>
+                        <p>The first quiz surrounded basic Java concepts and Operators. At first, I found it nerve-wracking, because it was the first quiz ever. I tried my best to study all the memory locations, how it works, how a Java program runs, the history of Java, and how Operators work. Luckily I did, because everything was in the exam.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="responsive">
+                <div class="gallery">
+                    <h1>Midterm Quiz #2 (Online)</h1>
+                    <img class="gallery-img" src="MQ2.png" alt="Midterm Quiz#2">
+                    
+                    <div class="desc">
+                        <h6>Reflection</h6>
+                        <p>The second quiz revolved around operators, loops, scans, arrays, and methods. It was a very challenging quiz for me, because I was still having a hard time grasping the environment. Fortunately, the syntax is similar to C, which helped me improve more. Moreover, I found Java extremely fun to experiment with because of the concept of packages. Overall, this quiz helped me study for the upcoming Midterm Examination.</p>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+                </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
+
+    <script>
+        // Get elements
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("img01");
+        const captionText = document.getElementById("caption");
+        const closeBtn = document.querySelector(".close");
+        const images = document.querySelectorAll(".gallery-img");
+
+        // Open modal on click
+        images.forEach(img => {
+            img.onclick = function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                captionText.innerHTML = this.alt;
+            }
+        });
+
+        // Close modal when 'x' is clicked
+        closeBtn.onclick = function() { 
+            modal.style.display = "none";
+        }
+
+        // Close modal if user clicks anywhere outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+  const path = window.location.pathname;
+  const isMidterm = ["Seatwork.html","Activities.html","Quizzes.html","Exams.html"]
+    .some(p => path.includes(p));
+  const isFinal = ["FinalSeatwork.html","FinalActivities.html","FinalQuizzes.html","FinalExams.html"]
+    .some(p => path.includes(p));
+
+  if (isMidterm) document.getElementById("midterm-item").classList.add("open");
+  if (isFinal)   document.getElementById("final-item").classList.add("open");
+</script>
+</body>
+</html>
