@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Georgia&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Monospace', serif; }
+        body { background: #e6e6e6; overflow-x: hidden; }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background-color: #f5f5f5;
+            position: relative;
+            z-index: 1000;
+        }
+        .logo { display: flex; align-items: center; color: #3a6030; font-size: 20px; font-weight: normal; }
+        .logo span.logo-star { font-size: 24px; margin-right: 10px; }
+        .logo span.logo-text { font-weight: bold; color: #2e5d26; }
+
+        .nav-links { display: flex; gap: 10px; align-items: center; list-style: none; flex-shrink: 1; }
+        .nav-links > li { position: static; flex-shrink: 0; }
+
+        .nav-links > li > a {
+            text-decoration: none; color: white; background-color: #2e5d26;
+            padding: 10px 22px; border-radius: 25px; font-size: 14px;
+            display: block; white-space: nowrap;
+            transition: background-color 0.3s ease, padding 0.35s ease, font-size 0.35s ease;
+        }
+        .nav-links > li > a:hover  { background-color: #1e3d1a; }
+        .nav-links > li > a.active { background-color: #8b895a; }
+
+        .nav-links:has(li.has-dropdown:hover) > li:not(.has-dropdown:hover) > a,
+        .nav-links:has(li.open) > li:not(.open) > a { padding: 10px 14px; font-size: 12px; }
+
+        .has-dropdown { display: flex; align-items: center; }
+        .has-dropdown > a {
+            border-radius: 25px; position: relative; z-index: 2;
+            transition: background-color 0.3s ease, border-radius 0.2s ease, padding 0.35s ease, font-size 0.35s ease;
+        }
+        .has-dropdown:hover > a,
+        .has-dropdown.open  > a { border-radius: 25px 0 0 25px; }
+
+        .dropdown-menu {
+            display: flex; flex-direction: row; list-style: none;
+            align-items: stretch; overflow: hidden;
+            background-color: #4a7c3f; border-radius: 0 25px 25px 0;
+            max-width: 0; opacity: 0; pointer-events: none;
+            transition: max-width 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+            white-space: nowrap; z-index: 2000;
+        }
+        .has-dropdown:hover .dropdown-menu,
+        .has-dropdown.open  .dropdown-menu { max-width: 600px; opacity: 1; pointer-events: auto; }
+
+        .dropdown-menu li { display: flex; align-items: center; }
+        .dropdown-menu li + li { border-left: 1px solid rgba(255,255,255,0.25); }
+        .dropdown-menu li a {
+            text-decoration: none; color: white; padding: 10px 18px;
+            font-size: 13px; display: block; white-space: nowrap;
+            transition: background-color 0.2s ease; border-radius: 0;
+        }
+        .dropdown-menu li:last-child a { border-radius: 0 25px 25px 0; }
+        .dropdown-menu li a:hover  { background-color: rgba(255,255,255,0.15); }
+        .dropdown-menu li a.active { background-color: #8b895a; }
+
+        .navbar-bottom-border { height: 5px; background-color: #b1bf88; width: 100%; position: relative; z-index: 999; }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            display: flex;
+            height: calc(100vh - 71px);
+            overflow: hidden;
+            background: linear-gradient(135deg, #cfd8c3 0%, #d4ddc8 100%);
+            position: relative;
+        }
+
+        /* --- SIDEBAR WRAPPER --- */
+        .sidebar-wrapper {
+            position: relative;
+            left: 0; top: 0;
+            height: 100%;
+            width: 320px;
+            z-index: 10;
+            pointer-events: none;
+            transition: width 0.5s ease;
+        }
+        .sidebar-wrapper:has(.sidebar:hover) { width: 550px; }
+        .sidebar-wrapper.force-open         { width: 550px; }
+
+        /* --- SIDEBARS --- */
+        .sidebar {
+            position: absolute; top: 0; left: 0;
+            height: 100%; padding: 40px 30px;
+            pointer-events: auto;
+        }
+
+        @keyframes waveS1 {
+            0%   { clip-path: path("M0,0 L250,0 C150,150 350,350 250,500 C100,650 350,850 250,1000 L0,1000 Z"); }
+            25%  { clip-path: path("M0,0 L270,0 C130,150 390,350 230,500 C80,650  390,850 270,1000 L0,1000 Z"); }
+            50%  { clip-path: path("M0,0 L240,0 C170,150 320,350 270,500 C140,650 320,850 240,1000 L0,1000 Z"); }
+            75%  { clip-path: path("M0,0 L260,0 C120,150 370,350 240,500 C90,650  370,850 260,1000 L0,1000 Z"); }
+            100% { clip-path: path("M0,0 L250,0 C150,150 350,350 250,500 C100,650 350,850 250,1000 L0,1000 Z"); }
+        }
+        @keyframes waveS2 {
+            0%   { clip-path: path("M0,0 L250,0 C150,150 350,350 250,500 C100,650 350,850 250,1000 L0,1000 Z"); }
+            25%  { clip-path: path("M0,0 L230,0 C160,150 330,350 270,500 C120,650 330,850 230,1000 L0,1000 Z"); }
+            50%  { clip-path: path("M0,0 L265,0 C140,150 365,350 245,500 C85,650  365,850 265,1000 L0,1000 Z"); }
+            75%  { clip-path: path("M0,0 L245,0 C155,150 345,350 255,500 C105,650 345,850 245,1000 L0,1000 Z"); }
+            100% { clip-path: path("M0,0 L250,0 C150,150 350,350 250,500 C100,650 350,850 250,1000 L0,1000 Z"); }
+        }
+        @keyframes waveS3 {
+            0%   { clip-path: path("M0,0 L250,0 C150,150 350,350 250,500 C100,650 350,850 250,1000 L0,1000 Z"); }
+            25%  { clip-path: path("M0,0 L260,0 C145,150 360,350 255,500 C95,650  360,850 260,1000 L0,1000 Z"); }
+            50%  { clip-path: path("M0,0 L238,0 C162,150 338,350 262,500 C115,650 338,850 238,1000 L0,1000 Z"); }
+            75%  { clip-path: path("M0,0 L255,0 C148,150 355,350 248,500 C98,650  355,850 255,1000 L0,1000 Z"); }
+            100% { clip-path: path("M0,0 L250,0 C150,150 350,350 250,500 C100,650 350,850 250,1000 L0,1000 Z"); }
+        }
+        @keyframes waveS1Hover {
+            0%   { clip-path: path("M0,0 L400,0 C300,150 500,350 400,500 C250,650 500,850 400,1000 L0,1000 Z"); }
+            25%  { clip-path: path("M0,0 L420,0 C280,150 520,350 380,500 C230,650 520,850 420,1000 L0,1000 Z"); }
+            50%  { clip-path: path("M0,0 L390,0 C310,150 490,350 410,500 C265,650 490,850 390,1000 L0,1000 Z"); }
+            75%  { clip-path: path("M0,0 L410,0 C290,150 510,350 395,500 C240,650 510,850 410,1000 L0,1000 Z"); }
+            100% { clip-path: path("M0,0 L400,0 C300,150 500,350 400,500 C250,650 500,850 400,1000 L0,1000 Z"); }
+        }
+        @keyframes waveS2Hover {
+            0%   { clip-path: path("M0,0 L450,0 C350,150 600,350 450,500 C300,650 600,850 450,1000 L0,1000 Z"); }
+            25%  { clip-path: path("M0,0 L470,0 C330,150 620,350 430,500 C280,650 620,850 470,1000 L0,1000 Z"); }
+            50%  { clip-path: path("M0,0 L440,0 C360,150 590,350 460,500 C315,650 590,850 440,1000 L0,1000 Z"); }
+            75%  { clip-path: path("M0,0 L460,0 C340,150 610,350 445,500 C295,650 610,850 460,1000 L0,1000 Z"); }
+            100% { clip-path: path("M0,0 L450,0 C350,150 600,350 450,500 C300,650 600,850 450,1000 L0,1000 Z"); }
+        }
+        @keyframes waveS3Hover {
+            0%   { clip-path: path("M0,0 L450,0 C350,150 600,350 450,500 C300,650 600,850 450,1000 L0,1000 Z"); }
+            25%  { clip-path: path("M0,0 L465,0 C340,150 615,350 440,500 C290,650 615,850 465,1000 L0,1000 Z"); }
+            50%  { clip-path: path("M0,0 L445,0 C355,150 595,350 455,500 C308,650 595,850 445,1000 L0,1000 Z"); }
+            75%  { clip-path: path("M0,0 L458,0 C345,150 608,350 448,500 C296,650 608,850 458,1000 L0,1000 Z"); }
+            100% { clip-path: path("M0,0 L450,0 C350,150 600,350 450,500 C300,650 600,850 450,1000 L0,1000 Z"); }
+        }
+
+        .sidebar.s1 { width: 800px; background: #2e5d26; z-index: 3; animation: waveS1 4s ease-in-out infinite; }
+        .sidebar.s1:hover { animation: waveS1Hover 3s ease-in-out infinite; }
+
+        .sidebar.s2 { width: 1000px; background: #5d7b40; z-index: 2; margin-left: 100px; animation: waveS2 4.6s ease-in-out infinite; animation-delay: -1.5s; }
+        .sidebar.s2:hover { animation: waveS2Hover 3s ease-in-out infinite; }
+
+        .sidebar.s3 { width: 3000px; background: #89a67e; z-index: 1; margin-left: 200px; animation: waveS3 5.2s ease-in-out infinite; animation-delay: -3s; }
+        .sidebar.s3:hover { animation: waveS3Hover 3s ease-in-out infinite; }
+
+        /* Force-open state via JS class — overrides animation */
+        .sidebar.s3.about-open {
+            animation: waveS3Hover 3s ease-in-out infinite !important;
+        }
+.sidebar.s1:hover .reveal-text { margin-left: 100px; opacity: 1; transform: translateX(0); max-width: 220px; }
+.sidebar.s2:hover .reveal-text { margin-left: 150px; opacity: 1; transform: translateX(0); max-width: 200px; }
+.sidebar.s3:hover .reveal-text { margin-left: 150px; opacity: 1; transform: translateX(0); max-width: 200px; }
+
+.sidebar.s3.about-open .reveal-text {
+    margin-left: 150px !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    max-width: 200px !important;
+}
+
+.reveal-text {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+    color: white;
+    padding-top: 20px;
+    max-width: 200px;      /* ← keeps text inside the wave shape */
+    word-wrap: break-word;
+}    /* --- SIDEBAR TEXT STYLING --- */
+.reveal-text .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+    margin-top: 18px;
+}
+.reveal-text .section-label:first-child { margin-top: 0; }
+
+.reveal-text h2 {
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.reveal-text .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.reveal-text .tag {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: white;
+    white-space: nowrap;
+}
+
+.reveal-text .org-block {
+    margin-bottom: 12px;
+}
+
+.reveal-text .org-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #e6dfac;
+    margin-bottom: 2px;
+}
+
+.reveal-text .org-role {
+    font-size: 11px;
+    color: rgba(255,255,255,0.75);
+    padding-left: 8px;
+    border-left: 2px solid rgba(255,255,255,0.3);
+    margin-bottom: 2px;
+}
+
+.reveal-text .divider {
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin: 14px 0;
+}
+
+.reveal-text .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 6px;
+}
+
+.reveal-text .contact-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.reveal-text .bio {
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+    font-weight: normal;
+}
+
+        .sidebar.s1:hover .reveal-text { margin-left: 100px; opacity: 1; transform: translateX(0); }
+        .sidebar.s2:hover .reveal-text { margin-left: 150px; opacity: 1; transform: translateX(0); }
+        .sidebar.s3:hover .reveal-text { margin-left: 150px; opacity: 1; transform: translateX(0); }
+
+        /* About-open reveal text (mirrors s3 hover) */
+        .sidebar.s3.about-open .reveal-text {
+            margin-left: 150px !important;
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+        }
+
+        /* --- RIGHT CONTENT --- */
+        .content {
+            flex: 1; background: transparent; position: relative;
+            display: flex; justify-content: center; align-items: center;
+            transition: all 0.5s ease;
+        }
+
+        /* --- PROFILE SCENE --- */
+        .profile-scene { position: relative; width: 480px; height: 520px; display: flex; justify-content: center; align-items: center; }
+
+        .blob-bg {
+            position: absolute; width: 340px; height: 380px;
+            background-color: #7a9e56;
+            border-radius: 62% 38% 55% 45% / 48% 52% 48% 52%;
+            top: 50%; left: 50%; transform: translate(-50%, -54%);
+            z-index: 1; animation: blobFloat 6s ease-in-out infinite;
+        }
+        @keyframes blobFloat {
+            0%, 100% { border-radius: 62% 38% 55% 45% / 48% 52% 48% 52%; transform: translate(-50%, -54%) rotate(0deg); }
+            33%       { border-radius: 50% 50% 40% 60% / 55% 45% 55% 45%; transform: translate(-50%, -56%) rotate(2deg); }
+            66%       { border-radius: 70% 30% 60% 40% / 45% 55% 45% 55%; transform: translate(-50%, -52%) rotate(-2deg); }
+        }
+
+        .sparkle { position: absolute; border-radius: 50%; background-color: #e6dfac; z-index: 0; animation: sparklePop 3s ease-in-out infinite; }
+        .sparkle-1 { width:12px; height:12px; top:60px;   right:60px;  animation-delay:0s; }
+        .sparkle-2 { width:8px;  height:8px;  top:100px;  right:30px;  animation-delay:0.5s; }
+        .sparkle-3 { width:6px;  height:6px;  top:45px;   right:110px; animation-delay:1s; }
+        .sparkle-4 { width:10px; height:10px; bottom:160px; left:30px; animation-delay:1.5s; }
+        .sparkle-5 { width:7px;  height:7px;  bottom:200px; left:65px; animation-delay:0.8s; }
+        @keyframes sparklePop { 0%,100%{transform:scale(1);opacity:0.7} 50%{transform:scale(1.4);opacity:1} }
+
+        .star {
+            position: absolute; background-color: #ffe458;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 15; text-align: center;
+            clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+        }
+        .star-top    { width:130px; height:130px; top:10px; right:10px; animation: starWobble 4s ease-in-out infinite; }
+        .star-bottom { width:110px; height:110px; bottom:130px; left:5px; animation: starWobble 4s ease-in-out infinite reverse; animation-delay:1s; }
+        @keyframes starWobble { 0%,100%{transform:rotate(20deg) scale(1)} 50%{transform:rotate(25deg) scale(1.06)} }
+        .star-top span    { font-size:17px; font-weight:bold; color:#3a5020; line-height:1.15; white-space:pre-line; }
+        .star-bottom span { font-size:22px; font-weight:bold; color:#3a5020; }
+
+        .photo-frame {
+            position: relative; z-index: 10; width: 260px; height: 340px;
+            border-radius: 130px 130px 20px 20px; overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.5); background: #b0c898;
+            box-shadow: 0 8px 32px rgba(46,93,38,0.18); margin-top: -30px;
+        }
+        .photo-frame img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+
+        .name-badge-wrapper { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); z-index:20; }
+        .badge-shadow { position:absolute; width:100%; height:100%; border-radius:30px; border:2px solid #89a67e; background:transparent; left:0; }
+        .badge-shadow-1 { top:8px; z-index:1; }
+        .badge-shadow-2 { top:16px; z-index:0; }
+        .badge-front { position:relative; background-color:#2e5d26; padding:14px 44px; border-radius:30px; z-index:2; white-space:nowrap; }
+        .badge-front h1 { color:white; font-size:20px; font-weight:bold; text-align:center; font-family:'Playfair Display',Georgia,serif; letter-spacing:0.3px; }
+
+        .pill-tag {
+            position:absolute; background:white; border-radius:20px; padding:6px 14px;
+            font-size:12px; font-weight:bold; color:#2e5d26; border:1.5px solid #b1bf88;
+            z-index:20; white-space:nowrap; animation:pillFloat 5s ease-in-out infinite;
+        }
+        .pill-oop  { bottom:120px; right:50px;  animation-delay:0s;   --tx:0; }
+        .pill-bsit { top:80px;    right:300px; animation-delay:1.2s; --tx:0; }
+        @keyframes pillFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+        .confetti-dot { position:absolute; border-radius:50%; z-index:0; opacity:0.55; animation:confettiFall 7s ease-in-out infinite; }
+        .cd1{width:14px;height:14px;background:#e6dfac;top:15%;right:18%;animation-delay:0s}
+        .cd2{width:10px;height:10px;background:#b1bf88;top:25%;right:10%;animation-delay:1s}
+        .cd3{width:8px; height:8px; background:#8b895a;top:70%;left:8%; animation-delay:2s}
+        .cd4{width:12px;height:12px;background:#e6dfac;top:80%;right:22%;animation-delay:0.5s}
+        .cd5{width:9px; height:9px; background:#5d7b40;top:10%;left:15%;animation-delay:1.8s}
+        .cd6{width:11px;height:11px;background:#e6dfac;bottom:5%;left:40%;animation-delay:3s}
+        @keyframes confettiFall { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-12px) rotate(180deg)} }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <span class="logo-star">⭐</span>
+        <span><span class="logo-text">My Portfolio</span> | Object-Oriented Programming</span>
+    </div>
+    <ul class="nav-links">
+        <li><a class="active" href="index.html">Home</a></li>
+
+        <li id="midterm-item" class="has-dropdown">
+            <a href="#" id="midterm-btn">Midterm</a>
+            <ul class="dropdown-menu" id="midterm-dropdown">
+                <li><a href="Seatwork.html">Seatworks</a></li>
+                <li><a href="Activities.html">Activities</a></li>
+                <li><a href="Quizzes.html">Quizzes</a></li>
+                <li><a href="Exams.html">Exam</a></li>
+            </ul>
+        </li>
+
+        <li id="final-item" class="has-dropdown">
+            <a href="#" id="final-btn">Final</a>
+            <ul class="dropdown-menu" id="final-dropdown">
+                <li><a href="index.html">Seatworks</a></li>
+                <li><a href="index.html">Activities</a></li>
+                <li><a href="index.html">Quizzes</a></li>
+                <li><a href="index.html">Exam</a></li>
+            </ul>
+        </li>
+
+        <li><a href="index.html#about">Contact</a></li>
+    </ul>
+</div>
+<div class="navbar-bottom-border"></div>
+
+<!-- MAIN -->
+<div class="container">
+    <div class="sidebar-wrapper" id="about">
+        <!-- S1: Tech Organizations -->
+<div class="sidebar s1">
+    <div class="reveal-text">
+        <div class="section-label">Involvement</div>
+        <h2>Tech Organizations</h2>
+
+        <div class="org-block">
+            <div class="org-name">🌐 Google Developer's Group — PUP</div>
+            <div class="org-role">Core Team Technical's Co-Lead</div>
+        </div>
+
+        <div class="org-block">
+            <div class="org-name">☁️ AWS Cloud Clubs — PUP</div>
+            <div class="org-role">Marketing Associate</div>
+        </div>
+
+        <div class="org-block">
+            <div class="org-name">🚀 ShiftOut</div>
+            <div class="org-role">Project Management Associate</div>
+            <div class="org-role">Partnerships Associate</div>
+        </div>
+    </div>
+</div>
+
+<!-- S2: Skills -->
+<div class="sidebar s2">
+    <div class="reveal-text"">
+        <div class="section-label">Soft Skills</div>
+        <h2>Competencies</h2>
+        <div class="tag-row">
+            <span class="tag">💬 Communication</span>
+            <span class="tag">👥 Leadership</span>
+            <span class="tag">🔧 Troubleshooting</span>
+            <span class="tag">🧩 Problem Solving</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-label">Languages</div>
+        <h2>Programming</h2>
+        <div class="tag-row">
+            <span class="tag">C</span>
+            <span class="tag">Python</span>
+            <span class="tag">Java</span>
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+        </div>
+    </div>
+</div>
+
+<!-- S3: About Me -->
+<div class="sidebar s3">
+    <div class="reveal-text">
+        <div class="section-label">Who I Am</div>
+        <h2>About Me</h2>
+        <p class="bio">Hi! I'm <strong>Danielle Pauleen G. Labasa</strong>, a 2nd Year BSIT student at PUP Main Campus. I love experimenting and building mini systems in Java, C, and Python. Aspiring Software Engineer and active student leader in tech.</p>
+
+        <div class="divider"></div>
+
+        <div class="section-label">Reach Out</div>
+        <h2>Contact</h2>
+        <div class="contact-row">
+            <span class="contact-icon">📧</span>
+            <span>daniellepauleen2@gmail.com</span>
+        </div>
+        <div class="contact-row">
+            <span class="contact-icon">📱</span>
+            <span>09088996727 (Smart)</span>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <div class="content">
+        <div class="profile-scene">
+            <div class="confetti-dot cd1"></div>
+            <div class="confetti-dot cd2"></div>
+            <div class="confetti-dot cd3"></div>
+            <div class="confetti-dot cd4"></div>
+            <div class="confetti-dot cd5"></div>
+            <div class="confetti-dot cd6"></div>
+            <div class="blob-bg"></div>
+            <div class="sparkle sparkle-1"></div>
+            <div class="sparkle sparkle-2"></div>
+            <div class="sparkle sparkle-3"></div>
+            <div class="sparkle sparkle-4"></div>
+            <div class="sparkle sparkle-5"></div>
+            <div class="star star-top"><span>2nd&#10;Year</span></div>
+            <div class="star star-bottom"><span>2N</span></div>
+            <div class="pill-tag pill-oop">💻 OOP</div>
+            <div class="pill-tag pill-bsit">🎓 BSIT</div>
+            <div class="photo-frame">
+                <img src="Danielle.png" alt="Danielle Pauleen G. Labasa" />
+            </div>
+            <div class="name-badge-wrapper">
+                <div class="badge-shadow badge-shadow-1"></div>
+                <div class="badge-shadow badge-shadow-2"></div>
+                <div class="badge-front">
+                    <h1>Danielle Pauleen G. Labasa</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* --- Navbar dropdown toggles --- */
+    function setupDropdown(itemId, btnId) {
+        const item = document.getElementById(itemId);
+        const btn  = document.getElementById(btnId);
+        if (!item || !btn) return;
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.nav-links > li.open').forEach(el => {
+                if (el !== item) el.classList.remove('open');
+            });
+            item.classList.toggle('open');
+        });
+    }
+    setupDropdown('midterm-item', 'midterm-btn');
+    setupDropdown('final-item',   'final-btn');
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('#midterm-item') && !e.target.closest('#final-item')) {
+            document.querySelectorAll('.nav-links > li.open').forEach(el => el.classList.remove('open'));
+        }
+    });
+
+    /* --- About Me sidebar auto-open on #about hash --- */
+    function openAboutSidebar() {
+        const wrapper = document.getElementById('about');
+        const s3      = document.querySelector('.sidebar.s3');
+        if (!wrapper || !s3) return;
+
+        // Add classes that trigger the CSS expanded state
+        wrapper.classList.add('force-open');
+        s3.classList.add('about-open');
+
+        // Remove after 4 seconds so user can hover normally again
+        setTimeout(() => {
+            wrapper.classList.remove('force-open');
+            s3.classList.remove('about-open');
+        }, 4000);
+    }
+
+    // Run on page load if hash is #about
+    window.addEventListener('DOMContentLoaded', function() {
+        if (window.location.hash === '#about') {
+            // Small delay so browser has painted before triggering animation
+            setTimeout(openAboutSidebar, 100);
+        }
+    });
+
+    // Also run if user clicks Contact while already on this page
+    document.querySelector('a[href="index.html#about"]')
+        ?.addEventListener('click', function() {
+            setTimeout(openAboutSidebar, 100);
+        });
+</script>
+
+</body>
+</html>
